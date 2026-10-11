@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MPI Teks Prosedur Kerja Ilmiah</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef4f3;--grid:#d3e2df;--ink:#17283a;--mut:#51636f;--card:#fff;--line:#b9cdca;--ac:#0e7566;--acs:#d5efe9;--warn:#fff1cf;--ok:#1d7a3e;--bad:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101c24;--grid:#1a2b36;--ink:#e6eef0;--mut:#9db1ba;--card:#182833;--line:#2f4654;--ac:#4fd1bd;--acs:#12403a;--warn:#3d3314;--ok:#6fd48f;--bad:#ff8a80}}
+:root[data-theme="dark"]{--bg:#101c24;--grid:#1a2b36;--ink:#e6eef0;--mut:#9db1ba;--card:#182833;--line:#2f4654;--ac:#4fd1bd;--acs:#12403a;--warn:#3d3314;--ok:#6fd48f;--bad:#ff8a80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;font-family:Lexend,system-ui,sans-serif;background:var(--bg);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);line-height:1.65;font-size:16px}
+header{padding:28px 20px 12px;max-width:820px;margin:auto}
+h1{font-size:clamp(1.6rem,5vw,2.4rem);line-height:1.15;margin:0 0 6px;font-weight:800}
+header p{margin:0;color:var(--mut)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:2px solid var(--ink);display:flex;overflow-x:auto;max-width:100%;padding:0 12px}
+nav button{flex:none;border:0;background:none;font:600 .85rem Lexend,sans-serif;color:var(--mut);padding:12px 12px;cursor:pointer;border-bottom:4px solid transparent}
+nav button.on{color:var(--ink);border-bottom-color:var(--ac)}
+nav button.done::after{content:" ✓";color:var(--ok)}
+main{max-width:820px;margin:auto;padding:20px}
+section{display:none}section.on{display:block}
+h2{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--mut);margin:0 0 18px}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:6px;padding:16px 18px;margin:14px 0}
+.note{background:var(--warn);border-left:6px solid #d99a00}
+button.b,.opt{font:600 .95rem Lexend,sans-serif;cursor:pointer;color:var(--ink)}
+button.b{background:var(--ac);color:#fff;border:2px solid var(--ink);border-radius:6px;padding:10px 16px;margin:6px 6px 0 0}
+:root[data-theme="dark"] button.b{color:#06201c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.b{color:#06201c}}
+button.alt{background:var(--card);color:var(--ink)}
+button:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #f2a900;outline-offset:2px}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:6px;padding:10px 12px;margin:8px 0}
+.opt:hover{border-color:var(--ac)}
+.opt.ok{border-color:var(--ok);background:var(--acs)}.opt.no{border-color:var(--bad)}
+.fb{margin-top:8px;padding:10px 12px;border-radius:6px;background:var(--acs)}
+.bar{height:8px;background:var(--line);border-radius:4px;margin:10px 0}.bar i{display:block;height:100%;background:var(--ac);border-radius:4px;transition:width .3s}
+details{background:var(--card);border:2px solid var(--ink);border-radius:6px;margin:10px 0}
+summary{cursor:pointer;font-weight:600;padding:12px 16px}
+details>div{padding:0 16px 14px}
+.tag{display:inline-block;font-weight:600;font-size:.8rem;padding:1px 8px;border-radius:4px;background:var(--ac);color:#fff;margin-right:6px}
+:root[data-theme="dark"] .tag{color:#06201c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag{color:#06201c}}
+.sim{display:grid;grid-template-columns:200px 1fr;gap:16px;align-items:start}
+@media(max-width:620px){.sim{grid-template-columns:1fr}}
+.slot{border:2px dashed var(--line);border-radius:6px;padding:8px 12px;margin:6px 0;min-height:42px}
+.slot.f{border:2px solid var(--ok);background:var(--acs)}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media(prefers-reduced-motion:reduce){.shake{animation:none}.bar i{transition:none}}
+textarea{width:100%;font:inherit;padding:10px;border:2px solid var(--ink);border-radius:6px;background:var(--card);color:var(--ink);min-height:80px}
+.chips button{margin:4px 6px 4px 0;padding:6px 12px;border:2px solid var(--ink);border-radius:20px;background:var(--card);color:var(--ink);font:600 .85rem Lexend,sans-serif;cursor:pointer}
+.chips button.on{background:var(--ac);color:#fff}
+.score{font-size:2.2rem;font-weight:800}
+svg text{fill:var(--ink);font-family:Lexend,sans-serif}
+</style>
+</head>
+<body>
+<header>
+<h1>Teks Prosedur dalam Kerja Ilmiah</h1>
+<p>Media Pembelajaran Interaktif · Bahasa Indonesia Kelas 7 · Contoh aspek fisis: pengukuran suhu</p>
+</header>
+<nav id="nav"></nav>
+<main>
+
+<section id="s0">
+<h2>Apersepsi</h2>
+<p class="sub">Mulai dari pengalamanmu sendiri.</p>
+<div class="card note"><b>Situasi.</b> Kamu dan temanmu masing-masing mengukur suhu air yang sedang dipanaskan. Hasilmu 82 °C, hasil temanmu 95 °C. Padahal airnya sama. Apa yang mungkin berbeda?</div>
+<details><summary>Pertanyaan 1: Apa yang bisa berbeda dari cara kerja kalian?</summary><div>Mungkin urutan langkahnya berbeda, posisi termometer berbeda (menyentuh dasar gelas), atau cara membaca skalanya tidak sama.</div></details>
+<details><summary>Pertanyaan 2: Bagaimana agar semua orang mendapat hasil yang sebanding?</summary><div>Semua mengikuti petunjuk yang sama: alat sama, langkah sama, dan urutan sama. Petunjuk seperti itu ditulis dalam <b>teks prosedur</b>.</div></details>
+<details><summary>Pertanyaan 3: Di mana kamu pernah membaca petunjuk berurutan?</summary><div>Resep masakan, cara memakai alat, petunjuk permainan, dan lembar kerja praktikum IPA.</div></details>
+<div class="card"><b>Tujuan belajar.</b> Setelah memakai media ini, kamu dapat (1) menjelaskan struktur teks prosedur, (2) mengenali ciri kebahasaannya, dan (3) menyusun langkah percobaan fisika dengan urutan dan bahasa yang tepat.</div>
+<button class="b" onclick="go(1)">Lanjut ke asesmen awal</button>
+</section>
+
+<section id="s1">
+<h2>Asesmen awal</h2>
+<p class="sub">Tidak ada nilai buruk di sini. Hasilnya hanya untuk melihat titik awalmu.</p>
+<div id="q-awal"></div>
+</section>
+
+<section id="s2">
+<h2>Materi pokok</h2>
+<p class="sub">Buka satu per satu.</p>
+<details open><summary>Pengertian</summary><div>Teks prosedur adalah teks yang berisi langkah-langkah melakukan suatu kegiatan secara berurutan. Dalam <b>kerja ilmiah</b>, teks prosedur dipakai untuk memandu percobaan agar hasilnya dapat diulang dan dibandingkan orang lain.</div></details>
+<details><summary>Struktur teks prosedur</summary><div>
+<p><span class="tag">Tujuan</span>Apa yang ingin dicapai atau diketahui.</p>
+<p><span class="tag">Alat dan bahan</span>Daftar lengkap, disertai jumlah dan ukuran (contoh: air 100 mL).</p>
+<p><span class="tag">Langkah-langkah</span>Tindakan berurutan, satu langkah satu kegiatan.</p>
+<p><span class="tag">Penutup</span>Hasil yang diharapkan, cara mencatat, atau catatan keselamatan.</p></div></details>
+<details><summary>Ciri kebahasaan</summary><div>
+<ul>
+<li><b>Kalimat perintah</b> berkata kerja dasar: <i>celupkan, baca, catat, matikan</i>.</li>
+<li><b>Kata penghubung urutan</b>: pertama, kemudian, selanjutnya, setelah itu, terakhir.</li>
+<li><b>Kata teknis</b> dan <b>satuan</b> ditulis tepat: 100 mL, 85 °C, 50 g.</li>
+<li><b>Kalimat efektif</b>: singkat, jelas, satu tindakan per kalimat, tanpa kata ragu seperti "mungkin" atau "sebaiknya".</li>
+</ul></div></details>
+<details><summary>Aspek fisis yang perlu ada dalam prosedur</summary><div>
+<ul>
+<li><b>Besaran dan satuan</b>: suhu (°C), massa (g), volume (mL), panjang (cm).</li>
+<li><b>Alat ukur</b>: termometer, neraca, gelas ukur, mistar.</li>
+<li><b>Variabel</b>: apa yang diukur dan apa yang dijaga tetap.</li>
+<li><b>Cara membaca skala</b>: mata sejajar dengan skala agar tidak terjadi kesalahan paralaks.</li>
+<li><b>Keselamatan kerja</b>: hati-hati dengan air panas dan alat pemanas.</li>
+</ul></div></details>
+<details><summary>Contoh teks</summary><div>
+<p><b>Mengukur Suhu Air dengan Termometer</b></p>
+<p><span class="tag">Tujuan</span>Mengetahui suhu air saat dipanaskan.</p>
+<p><span class="tag">Alat dan bahan</span>Termometer, gelas kimia, air 100 mL, pemanas spiritus, korek api.</p>
+<p><span class="tag">Langkah</span>Pertama, isi gelas kimia dengan air 100 mL. Kemudian, celupkan termometer tanpa menyentuh dasar gelas. Selanjutnya, panaskan air. Baca skala setinggi mata. Terakhir, catat suhu beserta satuannya.</p>
+<p><span class="tag">Penutup</span>Matikan pemanas dan tunggu air dingin sebelum dibereskan.</p></div></details>
+<button class="b" onclick="go(3)">Coba simulasi</button>
+</section>
+
+<section id="s3">
+<h2>Simulasi</h2>
+<p class="sub">Susun langkah percobaan "Mengukur Suhu Air" dengan menekan kartu langkah sesuai urutan yang benar.</p>
+<div class="sim">
+<svg id="svg" viewBox="0 0 200 250" width="100%" role="img" aria-label="Termometer dan gelas kimia">
+<rect x="20" y="170" width="110" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="3"/>
+<rect id="water" x="23" y="190" width="104" height="47" fill="#5ab4e6" opacity=".6"/>
+<g id="flame" style="display:none"><path d="M75 250 C60 235 70 228 75 215 C85 228 92 238 75 250Z" fill="#f08a00"/></g>
+<rect x="150" y="20" width="14" height="170" rx="7" fill="none" stroke="currentColor" stroke-width="3"/>
+<rect id="mer" x="154" y="150" width="6" height="40" fill="#d6372a"/>
+<circle cx="157" cy="196" r="11" fill="#d6372a"/>
+<text id="tx" x="100" y="40" text-anchor="middle" font-size="22" font-weight="700">–</text>
+</svg>
+<div>
+<div id="slots"></div>
+<p><b>Kartu langkah</b></p>
+<div id="bank"></div>
+<div id="smsg" class="fb" aria-live="polite">Pilih langkah pertama.</div>
+<button class="b alt" onclick="simInit()">Ulangi simulasi</button>
+</div></div>
+<button class="b" onclick="go(4)">Lanjut ke kuis</button>
+</section>
+
+<section id="s4">
+<h2>Kuis</h2>
+<p class="sub">Jawabanmu langsung dibahas.</p>
+<div id="q-kuis"></div>
+</section>
+
+<section id="s5">
+<h2>Asesmen akhir</h2>
+<p class="sub">Pembahasan baru muncul di akhir. Kerjakan dengan teliti.</p>
+<div id="q-akhir"></div>
+</section>
+
+<section id="s6">
+<h2>Refleksi</h2>
+<p class="sub">Lihat kemajuanmu, lalu tulis pendapatmu.</p>
+<div class="card" id="rsum"></div>
+<div class="card"><b>Seberapa paham kamu sekarang?</b>
+<div class="chips" data-k="Struktur teks prosedur"><p>Struktur teks prosedur<br></p><button>Paham</button><button>Cukup</button><button>Belum</button></div>
+<div class="chips" data-k="Ciri kebahasaan"><p>Ciri kebahasaan<br></p><button>Paham</button><button>Cukup</button><button>Belum</button></div>
+<div class="chips" data-k="Menyusun langkah percobaan"><p>Menyusun langkah percobaan<br></p><button>Paham</button><button>Cukup</button><button>Belum</button></div>
+</div>
+<div class="card">
+<label for="r1"><b>Bagian mana yang paling membantumu? Mengapa?</b></label><textarea id="r1"></textarea>
+<label for="r2"><b>Apa yang masih ingin kamu pelajari? Bagaimana rencanamu?</b></label><textarea id="r2"></textarea>
+<button class="b" onclick="fin()">Selesai</button>
+<div id="fin" class="fb" style="display:none" aria-live="polite"></div>
+</div>
+</section>
+</main>
+
+<script>
+var T=["Apersepsi","Asesmen awal","Materi","Simulasi","Kuis","Asesmen akhir","Refleksi"],S={},cur=0;
+var nav=document.getElementById("nav");
+T.forEach(function(t,i){var b=document.createElement("button");b.textContent=(i+1)+". "+t;b.onclick=function(){go(i)};nav.appendChild(b)});
+function mark(i){nav.children[i].classList.add("done")}
+function go(i){cur=i;for(var k=0;k<7;k++){document.getElementById("s"+k).classList.toggle("on",k===i);nav.children[k].classList.toggle("on",k===i)}
+ if(i>0)mark(i-1);if(i===6)sum();window.scrollTo(0,0);nav.children[i].scrollIntoView({inline:"center",block:"nearest"})}
+
+var D={
+awal:[
+["Teks prosedur berisi ...",["langkah-langkah melakukan sesuatu secara berurutan","cerita tokoh dan latar","pendapat penulis tentang suatu hal","gambaran suatu benda"],0,"Teks prosedur memandu pembaca melakukan kegiatan dengan urutan tertentu."],
+["Kalimat perintah yang tepat dalam prosedur adalah ...",["Termometer dicelupkan ke dalam air.","Celupkan termometer ke dalam air.","Termometer mungkin dicelupkan.","Kamu bisa mencelupkan termometer."],1,"Kalimat perintah memakai kata kerja dasar: celupkan."],
+["Alat untuk mengukur massa benda adalah ...",["termometer","mistar","neraca","gelas ukur"],2,"Neraca dipakai untuk mengukur massa."],
+["Kata penghubung yang menunjukkan urutan adalah ...",["tetapi","kemudian","karena","sehingga"],1,"Kemudian menunjukkan langkah berikutnya."],
+["Bagian yang memuat daftar benda yang dibutuhkan disebut ...",["tujuan","langkah-langkah","alat dan bahan","penutup"],2,"Daftar benda ada pada bagian alat dan bahan."]],
+kuis:[
+["Urutan struktur teks prosedur yang benar adalah ...",["Langkah, tujuan, alat dan bahan","Tujuan, alat dan bahan, langkah-langkah","Alat dan bahan, penutup, tujuan","Penutup, langkah, tujuan"],1,"Tujuan lebih dahulu, lalu alat dan bahan, lalu langkah, lalu penutup."],
+["Kalimat langkah percobaan yang paling efektif adalah ...",["Skala termometer sebaiknya mungkin dibaca.","Baca skala termometer setinggi mata.","Skala itu bisa saja dibaca oleh kamu.","Membaca skala termometer."],1,"Perintah langsung, jelas, dan tidak ragu."],
+["Penulisan hasil pengukuran yang benar adalah ...",["Suhu air 85","Suhu air 85 derajat saja","Suhu air 85 °C","Suhu air = panas"],2,"Hasil ukur harus memuat angka dan satuan."],
+["Kata pertama, selanjutnya, dan terakhir berfungsi untuk ...",["menunjukkan sebab","menunjukkan urutan langkah","menunjukkan pertentangan","menunjukkan perbandingan"],1,"Kata-kata itu penanda urutan (konjungsi temporal)."],
+["Langkah percobaan harus tepat dan berurutan agar ...",["teks menjadi panjang","hasil dapat diulang dan dibandingkan orang lain","alat tidak dipakai","percobaan cepat selesai"],1,"Kerja ilmiah menuntut hasil yang dapat diuji ulang."]],
+akhir:[
+["Tujuan teks prosedur dalam kerja ilmiah adalah ...",["menghibur pembaca","memandu percobaan agar hasilnya dapat diuji ulang","menceritakan pengalaman pribadi","membujuk pembaca membeli alat"],1,"Prosedur menjaga cara kerja tetap sama."],
+["Kalimat perintah yang tepat adalah ...",["Air dituangkan ke gelas ukur.","Tuangkan air 100 mL ke gelas ukur.","Air sebaiknya dituang.","Kita menuang air."],1,"Kata kerja dasar disertai ukuran."],
+["Bagian alat dan bahan yang paling lengkap ditulis ...",["air dan gelas","termometer, gelas kimia, air 100 mL, pemanas","alat-alat percobaan","bahan secukupnya"],1,"Sebutkan nama dan jumlah atau ukuran."],
+["Urutan menimbang benda dengan neraca yang benar adalah ...",["Letakkan benda, baca massa, periksa angka nol","Periksa angka nol, letakkan benda, baca massa","Baca massa, letakkan benda, periksa angka nol","Letakkan benda, periksa nol, baca massa"],1,"Neraca harus menunjuk nol sebelum benda diletakkan."],
+["Kata yang TIDAK menyatakan urutan langkah adalah ...",["Setelah itu","Kemudian","Karena","Terakhir"],2,"Karena menyatakan sebab."],
+["Skala termometer dibaca setinggi mata untuk menghindari ...",["kesalahan paralaks","air menguap","alat patah","tulisan terhapus"],0,"Paralaks adalah kesalahan baca akibat posisi mata."]]};
+
+function quiz(key,fb){
+ var el=document.getElementById("q-"+key),Q=D[key],i=0,sc=0;
+ function show(){
+  if(i>=Q.length){var p=Math.round(sc/Q.length*100);S[key]=p;mark(key==="awal"?1:key==="kuis"?4:5);
+   el.innerHTML='<div class="card"><div class="score">'+sc+' / '+Q.length+'</div><p>'+(p>=80?"Bagus sekali! Kamu sudah menguasai materi ini.":p>=60?"Cukup baik. Ulangi materi yang masih ragu.":"Masih perlu latihan. Buka lagi bagian Materi dan Simulasi.")+'</p></div><button class="b" onclick="go('+(cur+1)+')">Lanjut</button><button class="b alt" id="rt">Ulangi</button>';
+   document.getElementById("rt").onclick=function(){i=0;sc=0;show()};return}
+  var q=Q[i];
+  el.innerHTML='<div class="bar"><i style="width:'+(i/Q.length*100)+'%"></i></div><div class="card"><p><b>Soal '+(i+1)+' dari '+Q.length+'</b></p><p>'+q[0]+'</p><div id="o"></div><div id="f"></div></div>';
+  var o=document.getElementById("o");
+  q[1].forEach(function(t,k){var b=document.createElement("button");b.className="opt";b.textContent=t;
+   b.onclick=function(){
+    var right=k===q[2];if(right)sc++;
+    if(!fb){i++;show();return}
+    Array.prototype.forEach.call(o.children,function(c,j){c.disabled=true;if(j===q[2])c.classList.add("ok");else if(j===k)c.classList.add("no")});
+    document.getElementById("f").innerHTML='<div class="fb"><b>'+(right?"Benar.":"Belum tepat.")+'</b> '+q[3]+'</div><button class="b" id="nx">'+(i+1<Q.length?"Soal berikutnya":"Lihat hasil")+'</button>';
+    document.getElementById("nx").onclick=function(){i++;show()}};
+   o.appendChild(b)});
+ }
+ show();
+}
+quiz("awal",false);quiz("kuis",true);quiz("akhir",false);
+
+var steps=[["Siapkan termometer, gelas kimia, air, dan pemanas.",27,"Siapkan alat dan bahan dahulu."],["Isi gelas kimia dengan air 100 mL.",27,"Air dituang sebelum termometer dicelup."],["Celupkan termometer tanpa menyentuh dasar gelas.",27,"Termometer harus ada di air sebelum dipanaskan."],["Nyalakan pemanas dan panaskan air.",70,"Pemanasan dimulai setelah alat terpasang."],["Baca skala termometer setinggi mata.",88,"Skala dibaca saat air panas, sebelum dicatat."],["Catat suhu beserta satuannya (°C) dalam tabel.",88,"Hasil dicatat setelah dibaca."],["Matikan pemanas dan tunggu air dingin sebelum dibereskan.",55,"Keselamatan: langkah penutup."]];
+var nxt=0;
+function setT(v){document.getElementById("mer").setAttribute("y",190-(v-20)/80*170);document.getElementById("mer").setAttribute("height",(v-20)/80*170+2);document.getElementById("tx").textContent=v+" °C";document.getElementById("water").setAttribute("opacity",v>60?".85":".6")}
+function simInit(){
+ nxt=0;setT(27);document.getElementById("flame").style.display="none";
+ document.getElementById("slots").innerHTML="";
+ document.getElementById("smsg").textContent="Pilih langkah pertama.";
+ var b=document.getElementById("bank");b.innerHTML="";
+ var idx=steps.map(function(_,i){return i}).sort(function(a,b){return((a*5+3)%7)-((b*5+3)%7)});
+ idx.forEach(function(k){var x=document.createElement("button");x.className="opt";x.textContent=steps[k][0];
+  x.onclick=function(){
+   var m=document.getElementById("smsg");
+   if(k===nxt){var s=document.createElement("div");s.className="slot f";s.textContent=(nxt+1)+". "+steps[k][0];document.getElementById("slots").appendChild(s);
+    x.style.display="none";setT(steps[k][1]);document.getElementById("flame").style.display=(nxt>=3&&nxt<=5)?"block":"none";nxt++;
+    m.textContent=nxt===steps.length?"Selesai! Urutan percobaanmu sudah benar, dan setiap kalimat memakai kata kerja perintah.":"Benar. Pilih langkah ke-"+(nxt+1)+".";if(nxt===steps.length){S.sim=true;mark(3)}}
+   else{x.classList.add("shake");setTimeout(function(){x.classList.remove("shake")},400);m.textContent="Belum tepat. Petunjuk: "+steps[nxt][2]}};
+  b.appendChild(x)});
+}
+simInit();
+
+document.querySelectorAll(".chips").forEach(function(c){c.querySelectorAll("button").forEach(function(b){b.onclick=function(){c.querySelectorAll("button").forEach(function(x){x.classList.remove("on")});b.classList.add("on")}})});
+function sum(){var f=function(v){return v==null?"belum dikerjakan":v+"/100"};
+ document.getElementById("rsum").innerHTML="<b>Perkembanganmu</b><p>Asesmen awal: "+f(S.awal)+"<br>Kuis: "+f(S.kuis)+"<br>Asesmen akhir: "+f(S.akhir)+"<br>Simulasi: "+(S.sim?"selesai":"belum selesai")+"</p>"+(S.awal!=null&&S.akhir!=null?"<p>"+(S.akhir>S.awal?"Nilaimu naik "+(S.akhir-S.awal)+" poin dari asesmen awal.":S.akhir===S.awal?"Nilaimu sama dengan asesmen awal. Coba ulangi materi dan simulasi.":"Nilaimu turun dari asesmen awal. Ulangi materi, lalu coba lagi.")+"</p>":"")}
+function fin(){var n=document.querySelectorAll(".chips button.on").length;var m=document.getElementById("fin");m.style.display="block";m.textContent=n<3?"Pilih tingkat pemahamanmu pada ketiga topik dahulu.":"Terima kasih sudah merefleksi. Bagian yang kamu pilih \"Belum\" adalah target belajar berikutnya.";if(n===3)mark(6)}
+go(0);
+</script>
+</body>
+</html>
